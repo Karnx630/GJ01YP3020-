@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valve Shim Calculator</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -65,7 +66,6 @@
 <div class="container">
     <h2>Shim Calculator</h2>
     
-    <!-- Pre-filled with XPulse 210 typical intake target as a default -->
     <label for="targetClearance">Target Clearance (mm)</label>
     <input type="number" id="targetClearance" step="0.01" value="0.10" oninput="calculateShim()">
 
@@ -87,15 +87,12 @@
 
 <script>
     function calculateShim() {
-        // Get values from inputs
         const target = parseFloat(document.getElementById('targetClearance').value) || 0;
         const measured = parseFloat(document.getElementById('measuredClearance').value) || 0;
         const oldShim = parseFloat(document.getElementById('oldShim').value) || 0;
 
-        // The Formula: Old Shim + (Measured Clearance - Target Clearance)
         let newShim = oldShim + (measured - target);
 
-        // Display logic to handle empty fields smoothly
         const resultDisplay = document.getElementById('newShimResult');
         if (measured > 0 && oldShim > 0) {
             resultDisplay.textContent = newShim.toFixed(3) + " mm";
@@ -105,5 +102,16 @@
     }
 </script>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+    });
+  }
+</script>
+
 </body>
 </html>
+
